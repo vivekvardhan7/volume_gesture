@@ -1,0 +1,116 @@
+import cv2
+import pyautogui
+import mediapipe as mp
+
+cap = cv2.VideoCapture(0)
+
+mp_hands = mp.solutions.hands
+hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,
+                       min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+mp_drawing = mp.solutions.drawing_utils
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    results = hands.process(image_rgb)
+
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            mp_drawing.draw_landmarks(
+                frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+
+            index_finger_y = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y
+            thumb_y = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y
+
+            if index_finger_y < thumb_y:
+                hand_gesture = 'pointing up'
+            elif index_finger_y > thumb_y:
+                hand_gesture = 'pointing down'
+            else:
+                hand_gesture = 'other'
+
+            if hand_gesture == 'pointing up':
+                pyautogui.press('volumeup')
+            elif hand_gesture == 'pointing down':
+                pyautogui.press('volumedown')
+
+    cv2.imshow('Hand Gesture', frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+import cv2
+import pyautogui
+import mediapipe as mp
+import math
+
+cap = cv2.VideoCapture(0)
+
+mp_hands = mp.solutions.hands
+hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1,
+                       min_detection_confidence=0.5, min_tracking_confidence=0.5)
+
+mp_drawing = mp.solutions.drawing_utils
+
+# Previous state of hand gesture
+prev_gesture = None
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    results = hands.process(image_rgb)
+
+    if results.multi_hand_landmarks:
+        for hand_landmarks in results.multi_hand_landmarks:
+            mp_drawing.draw_landmarks(
+                frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+
+            index_finger_y = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].y
+            thumb_y = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].y
+
+            # Calculate the angle between index finger and thumb
+            index_finger_x = hand_landmarks.landmark[mp_hands.HandLandmark.INDEX_FINGER_TIP].x
+            thumb_x = hand_landmarks.landmark[mp_hands.HandLandmark.THUMB_TIP].x
+            angle = math.degrees(math.atan2(thumb_y - index_finger_y, thumb_x - index_finger_x))
+
+            if angle < 0:
+                angle += 360
+
+            # Determine hand gesture based on finger positions and angle
+            if index_finger_y < thumb_y and 45 <= angle <= 135:
+                hand_gesture = 'pointing up'
+            elif index_finger_y > thumb_y and 225 <= angle <= 315:
+                hand_gesture = 'pointing down'
+            else:
+                hand_gesture = 'other'
+
+            # Perform actions based on hand gesture
+            if hand_gesture != prev_gesture:
+                if hand_gesture == 'pointing up':
+                    pyautogui.press('volumeup')
+                    pyautogui.alert('Volume Up!')
+                elif hand_gesture == 'pointing down':
+                    pyautogui.press('volumedown')
+                    pyautogui.alert('Volume Down!')
+                prev_gesture = hand_gesture
+
+    cv2.imshow('Hand Gesture', frame)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+
+cap.release()
+cv2.destroyAllWindows()
+
+
