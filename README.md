@@ -1,4 +1,4 @@
-👋 Hello World! I'm [sai vivek vardhan], a passionate Computer Science and Engineering (CSE) student at the National Institute of Technology (NIT), [Mizoram].
+I'm sai vivek tata, a passionate Computer Science and Engineering (CSE) student at the National Institute of Technology Mizoram.
 
 🎓 Currently pursuing my Bachelor's degree with a focus on software development, algorithms, and data structures.
 
@@ -12,6 +12,6 @@
 
 🌟 Always eager to connect with like-minded individuals and exchange knowledge and ideas.
 
-📫 You can reach me via email at [saivivek2803@gmail.com] or connect with me on LinkedIn [https://www.linkedin.com/in/sai-vivek-049210280].
+📫 You can reach me via email at saivivek2803@gmail.com or connect with me on LinkedIn https://www.linkedin.com/in/sai-vivek-049210280.
 
 🌐 Check out my GitHub repositories to see what I'm currently working on and feel free to collaborate or provide feedback!
